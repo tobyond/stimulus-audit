@@ -3,29 +3,32 @@
 require_relative "lib/stimulus_audit/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "stimulus-audit"
-  spec.version = StimulusAudit::VERSION
-  spec.authors = ["Toby"]
-  spec.email = ["toby@darkroom.tech"]
-
-  spec.summary = "Audit Stimulus.js controllers in your Rails application"
-  spec.description = "A Ruby gem to analyze usage of Stimulus controllers, finding unused controllers and undefined controllers"
-  spec.homepage = "https://github.com/yourusername/stimulus-audit"
-  spec.license = "MIT"
-  spec.require_paths = ["lib"]
+  spec.name          = "stimulus-audit"
+  spec.version       = StimulusAudit::VERSION
+  spec.authors       = ["Your Name"]
+  spec.email         = ["toby@darkroom.tech"]
+  spec.summary       = "Audit Stimulus.js controllers in your Rails application"
+  spec.description   = "A Ruby gem to analyze usage of Stimulus controllers, finding unused controllers and undefined controllers"
+  spec.homepage      = "https://github.com/tobyond/stimulus-audit"
+  spec.license       = "MIT"
   spec.required_ruby_version = ">= 3.3.0"
 
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = spec.homepage
-  spec.metadata["allowed_push_host"] = "https://rubygems.org"
+  spec.metadata = {
+    "homepage_uri"    => spec.homepage,
+    "changelog_uri"   => "#{spec.homepage}/blob/main/CHANGELOG.md",
+    "source_code_uri" => spec.homepage,
+    "bug_tracker_uri" => "#{spec.homepage}/issues"
+  }
 
-  spec.files = Dir.chdir(__dir__) do
-    `git ls-files -z`.split("\x0").reject do |f|
-      (File.expand_path(f) == __FILE__) ||
-        f.start_with?(*%w[bin/ test/ spec/ features/ .git appveyor Gemfile])
-    end
-  end
-  spec.bindir = "exe"
-  spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  # Specify which files should be added to the gem when it is released.
+  spec.files = Dir.glob(%w[
+    lib/**/*
+    README.md
+    LICENSE.txt
+    CHANGELOG.md
+  ])
   spec.require_paths = ["lib"]
+
+  spec.add_development_dependency "rake", "~> 13.0"
+  spec.add_development_dependency "minitest", "~> 5.0"
 end

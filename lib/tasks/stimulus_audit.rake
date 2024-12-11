@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-namespace :stimulus do
+namespace :audit do
   desc "Audit Stimulus controllers usage and find orphaned controllers"
-  task audit: :environment do
+  task stimulus: :environment do
     StimulusAudit::Auditor.new.audit.to_console
   end
 
-  desc "Scan files for stimulus controller usage (e.g., rake stimulus:scan[users--name])"
+  desc "Scan files for stimulus controller usage (e.g., rake audit:scan[products])"
   task :scan, [:controller] => :environment do |_, args|
     controller = args[:controller]
     if controller.nil? || controller.empty?
-      puts "Please provide a controller name: rake stimulus:scan[controller_name]"
+      puts "Please provide a controller name: rake audit:scan[controller_name]"
       next
     end
 

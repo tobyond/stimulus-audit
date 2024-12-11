@@ -2,13 +2,14 @@
 
 require "set"
 require "pathname"
-require "stimulus_audit/version"
-require "stimulus_audit/configuration"
-require "stimulus_audit/auditor"
-require "stimulus_audit/scanner"
+require_relative "stimulus_audit/version"
+require_relative "stimulus_audit/configuration"
+require_relative "stimulus_audit/auditor"
+require_relative "stimulus_audit/scanner"
 
 if defined?(Rails)
   require "rails"
+  require 'stimulus_audit'
   require "stimulus_audit/railtie"
 end
 

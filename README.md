@@ -22,7 +22,7 @@ bundle install
 Run an audit to see all defined and used controllers in your application:
 
 ```bash
-rails stimulus:audit
+rails audit:stimulus
 ```
 
 This will show:
@@ -56,13 +56,13 @@ Example output:
 Find all uses of a specific controller:
 
 ```bash
-rails stimulus:scan[controller_name]
+rails audit:scan[controller_name]
 ```
 
 Example:
 ```bash
-rails stimulus:scan[products]
-rails stimulus:scan[users--name]  # For namespaced controllers
+rails audit:scan[products]
+rails audit:scan[users--name]  # For namespaced controllers
 ```
 
 ### Configuration
