@@ -64,4 +64,24 @@ class AuditorTest < StimulusAuditTest
     assert_includes result.undefined_controllers, "undefined"
     refute_includes result.undefined_controllers, "defined"
   end
+
+  def test_handles_underscore_to_hyphen_conversion
+    create_controller_file("date_format")
+    create_view_file("users/profile.html.erb", '<div data-controller="date-format"></div>')
+
+    result = StimulusAudit::Auditor.new.audit
+    assert_includes result.defined_controllers, "date-format"
+    assert_includes result.used_controllers, "date-format"
+    assert_includes result.active_controllers, "date-format"
+  end
+
+  def test_handles_namespaced_controllers_with_underscores
+    create_controller_file("users/profile_card")
+    create_view_file("users/show.html.erb", '<div data-controller="users--profile-card"></div>')
+
+    result = StimulusAudit::Auditor.new.audit
+    assert_includes result.defined_controllers, "users--profile-card"
+    assert_includes result.used_controllers, "users--profile-card"
+    assert_includes result.active_controllers, "users--profile-card"
+  end
 end

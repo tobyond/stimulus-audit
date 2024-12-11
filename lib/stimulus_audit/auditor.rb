@@ -34,8 +34,8 @@ module StimulusAudit
           controller_path = full_path.each_filename.to_a[(controllers_dir + 1)..]
           # Remove _controller.js from the last component
           controller_path[-1] = controller_path[-1].sub(/_controller\.(js|ts)$/, "")
-          # Join with -- for namespacing
-          name = controller_path.join("--")
+          # Join with -- for namespacing and convert underscores to hyphens
+          name = controller_path.join("--").gsub("_", "-")
           controllers << name
         end
       end
@@ -54,8 +54,10 @@ module StimulusAudit
           content = File.read(file)
           patterns.each do |pattern|
             content.scan(pattern) do |match|
-              # Split in case of multiple controllers: "users--name list toggle"
+              # Split in case of multiple controllers
               match[0].split(/\s+/).each do |controller|
+                # Store controller names exactly as they appear in the view
+                # (they should already have hyphens as per Stimulus conventions)
                 controllers << controller
               end
             end

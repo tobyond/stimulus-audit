@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'set'
-require 'pathname'
+require "set"
+require "pathname"
 require "stimulus_audit/version"
 require "stimulus_audit/configuration"
 require "stimulus_audit/auditor"
@@ -9,7 +9,7 @@ require "stimulus_audit/scanner"
 
 if defined?(Rails)
   require "rails"
-  require "stimulus_audit/railtie" 
+  require "stimulus_audit/railtie"
 end
 
 module StimulusAudit
