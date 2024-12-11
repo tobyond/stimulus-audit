@@ -1,35 +1,122 @@
-# StimulusAudit
+# Stimulus Audit
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/stimulus_audit`. To experiment with that code, run `bin/console` for an interactive prompt.
+A Ruby gem to analyze Stimulus.js controller usage in your Rails application. Find unused controllers, undefined controllers, and audit your Stimulus controller usage.
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+```ruby
+gem 'stimulus-audit'
+```
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+And then execute:
+```bash
+bundle install
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### Audit All Controllers
+
+Run an audit to see all defined and used controllers in your application:
+
+```bash
+rails stimulus:audit
+```
+
+This will show:
+- Controllers that are defined but never used
+- Controllers that are used but don't have corresponding files
+- Active controllers and where they're being used
+- Summary statistics
+
+Example output:
+```
+📊 Stimulus Controller Audit
+
+❌ Defined but unused controllers:
+   unused_feature
+   └─ app/javascript/controllers/unused_feature_controller.js
+
+⚠️  Used but undefined controllers:
+   missing_controller
+   └─ app/views/products/show.html.erb (lines: 15, 23)
+
+✅ Active controllers:
+   products
+   └─ Defined in: app/javascript/controllers/products_controller.js
+   └─ Used in:
+      └─ app/views/products/index.html.erb (lines: 10, 45)
+      └─ app/components/product_card/component.html.erb (lines: 3)
+```
+
+### Scan for Specific Controller Usage
+
+Find all uses of a specific controller:
+
+```bash
+rails stimulus:scan[controller_name]
+```
+
+Example:
+```bash
+rails stimulus:scan[products]
+rails stimulus:scan[users--name]  # For namespaced controllers
+```
+
+### Configuration
+
+You can customize the paths that are scanned in an initializer (`config/initializers/stimulus_audit.rb`):
+
+```ruby
+StimulusAudit.configure do |config|
+  config.view_paths = [
+    Rails.root.join('app/views/**/*.{html,erb,haml}'),
+    Rails.root.join('app/javascript/**/*.{js,jsx}'),
+    Rails.root.join('app/components/**/*.{html,erb,haml,rb}')
+  ]
+  
+  config.controller_paths = [
+    Rails.root.join('app/javascript/controllers/**/*.{js,ts}')
+  ]
+end
+```
+
+## Features
+
+- Finds unused Stimulus controllers
+- Detects controllers used in views but missing controller files
+- Supports namespaced controllers (e.g., `users--name`)
+- Handles multiple syntax styles:
+  ```ruby
+  # HTML attribute syntax
+  <div data-controller="products">
+  
+  # Ruby hash syntax
+  <%= f.submit 'Save', data: { controller: 'products' } %>
+  
+  # Hash rocket syntax
+  <%= f.submit 'Save', data: { :controller => 'products' } %>
+  ```
+- Scans ERB, HTML, and HAML files
+- Works with both JavaScript and TypeScript controller files
+- Supports component-based architectures
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo:
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+1. Run `bundle install` to install dependencies
+2. Run `rake test` to run the tests
+3. Create a branch for your changes (`git checkout -b my-new-feature`)
+4. Make your changes and add tests
+5. Ensure tests pass
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/stimulus_audit.
+Bug reports and pull requests are welcome on GitHub. This project is intended to be a safe, welcoming space for collaboration.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the MIT License.
